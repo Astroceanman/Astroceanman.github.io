@@ -149,8 +149,8 @@ function frame(t) {
 build();
 requestAnimationFrame(frame);
 
-const io = new IntersectionObserver(entries => {
+window.revealObserver = new IntersectionObserver(entries => {
   for (const e of entries) if (e.isIntersecting) e.target.classList.add("in");
 }, { threshold: 0.12 });
 
-document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+document.querySelectorAll(".reveal").forEach(el => window.revealObserver.observe(el));

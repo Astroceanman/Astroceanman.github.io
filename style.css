@@ -390,23 +390,31 @@ footer {
 section.wide { max-width: 76rem; }
 
 .gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 7vh, 5rem);
 }
 
-.shot { margin: 0; }
+.photo-row {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+}
 
-.shot-frame {
+.photo-row:nth-child(even) .photo-frame { order: 2; }
+
+.photo-frame {
   position: relative;
-  aspect-ratio: 4 / 3;
-  border-radius: 14px;
+  aspect-ratio: 3 / 2;
+  border-radius: 16px;
   overflow: hidden;
   border: 1px solid var(--line);
   background: var(--card);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.45);
 }
 
-.shot-frame img {
+.photo-frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -415,7 +423,7 @@ section.wide { max-width: 76rem; }
   transition: transform 0.5s ease;
 }
 
-.shot-frame:hover img { transform: scale(1.04); }
+.photo-frame:hover img { transform: scale(1.03); }
 
 .shot-ph {
   position: absolute;
@@ -429,16 +437,34 @@ section.wide { max-width: 76rem; }
   padding: 1rem;
 }
 
-.shot-ph span { font-family: "Fraunces", serif; font-size: 1.05rem; }
+.shot-ph span { font-family: "Fraunces", serif; font-size: 1.15rem; }
 .shot-ph em { font-size: 0.78rem; color: var(--ink-dim); font-style: normal; }
 
-.shot.missing img { display: none; }
-.shot.missing .shot-ph { display: flex; }
-.shot.missing .shot-frame { border-style: dashed; border-color: rgba(143, 208, 255, 0.35); }
+.photo-row.missing img { display: none; }
+.photo-row.missing .shot-ph { display: flex; }
+.photo-row.missing .photo-frame { border-style: dashed; border-color: rgba(143, 208, 255, 0.35); box-shadow: none; }
 
-.shot figcaption { margin-top: 0.7rem; display: flex; flex-direction: column; gap: 0.15rem; }
-.shot figcaption strong { font-weight: 500; font-size: 0.95rem; }
-.shot figcaption span { color: var(--ink-dim); font-size: 0.8rem; }
+.photo-info h3 {
+  font-family: "Fraunces", serif;
+  font-weight: 400;
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+  margin-bottom: 0.5rem;
+}
+
+.photo-meta {
+  color: var(--accent);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.9rem;
+}
+
+.photo-desc { color: var(--ink-dim); font-size: 0.95rem; }
+
+@media (max-width: 760px) {
+  .photo-row { grid-template-columns: 1fr; gap: 1.1rem; }
+  .photo-row:nth-child(even) .photo-frame { order: 0; }
+}
 
 #lightbox {
   position: fixed;
