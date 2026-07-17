@@ -460,6 +460,9 @@ section.wide { max-width: 76rem; }
 }
 
 .photo-desc { color: var(--ink-dim); font-size: 0.95rem; }
+.photo-desc strong { color: var(--ink); font-weight: 500; }
+.photo-desc a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+.photo-desc a:hover { color: #b5e0ff; }
 
 @media (max-width: 760px) {
   .photo-row { grid-template-columns: 1fr; gap: 1.1rem; }
