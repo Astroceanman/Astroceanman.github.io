@@ -14,8 +14,8 @@ const PHOTOS = [
   {
     src: "photos/comet_a3.jpg",
     title: "C/2023 A3 · Comet Tsuchinshan-ATLAS",
-    meta: "October 2024 · Baltimore, MD · Canon EOS 5D Mark IV · f/2.8 · ISO 320 · 2.5 s",
-    desc: "Comet C/2023 A3 (Tsuchinshan-ATLAS) in the evening sky of mid-October 2024, days after its closest approach to Earth. The broad plume sweeping away from the Sun is the dust tail, grains released from the nucleus and pushed outward by sunlight. The thin spike extending in the opposite direction is an antitail: not a real second tail, but a perspective effect that appeared for a few days around October 14, when Earth crossed the comet's orbital plane and saw its spread-out dust sheet edge-on. The comet is named for its independent discoverers, China's Purple Mountain (Zijinshan) Observatory and the ATLAS survey. Shot from Baltimore with a Canon EOS 5D Mark IV and a Canon EF 24-70mm f/2.8L II USM at f/2.8, ISO 320, 2.5 s."
+    meta: "October 2024 · Baltimore, MD · Canon EOS 5D Mark IV · f/2.8 · ISO 320 · 85 s total",
+    desc: "Comet C/2023 A3 (Tsuchinshan-ATLAS) in the evening sky of mid-October 2024, days after its closest approach to Earth. The broad plume sweeping away from the Sun is the dust tail, grains released from the nucleus and pushed outward by sunlight. The thin spike extending in the opposite direction is an antitail: not a real second tail, but a perspective effect that appeared for a few days around October 14, when Earth crossed the comet's orbital plane and saw its spread-out dust sheet edge-on. The comet is named for its independent discoverers, China's Purple Mountain (Zijinshan) Observatory and the ATLAS survey. Shot from Baltimore with a Canon EOS 5D Mark IV and a Canon EF 24-70mm f/2.8L II USM at f/2.8, ISO 320, with 85 s of total exposure."
   },
   {
     src: "photos/eclipse2024.jpg",
