@@ -110,7 +110,7 @@ header h1 {
   font-family: "Fraunces", serif;
   font-style: italic;
   font-size: clamp(1.05rem, 2.2vw, 1.5rem);
-  color: #fff;
+  color: var(--ink-dim);
   letter-spacing: 0.14em;
 }
 
