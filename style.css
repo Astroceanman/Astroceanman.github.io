@@ -454,6 +454,23 @@ section.wide { max-width: 76rem; }
 .shot-ph span { font-family: "Fraunces", serif; font-size: 1.15rem; }
 .shot-ph em { font-size: 0.78rem; color: var(--ink-dim); font-style: normal; }
 
+.photo-credit {
+  position: absolute;
+  right: 0.9rem;
+  bottom: 0.7rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
+  pointer-events: none;
+}
+
+.photo-row.missing .photo-credit { display: none; }
+
+#lb-frame { position: relative; display: inline-block; }
+#lb-frame .photo-credit { right: 1.1rem; bottom: 1rem; }
+
 .photo-row.missing img { display: none; }
 .photo-row.missing .shot-ph { display: flex; }
 .photo-row.missing .photo-frame { border-style: dashed; border-color: rgba(143, 208, 255, 0.35); box-shadow: none; }

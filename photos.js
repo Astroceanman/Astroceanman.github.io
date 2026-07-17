@@ -1,5 +1,11 @@
 const PHOTOS = [
   {
+    src: "photos/cygnus.jpg",
+    title: "Cygnus wide field",
+    meta: "June 2026 · New Haven · Canon EOS 70D (astro-modified) · 4020 s total",
+    desc: "A wide-field view of Cygnus along the summer Milky Way, taking in the North America and Pelican Nebulae, the glowing Sadr region, and the faint arcs of the Veil Nebula. Shot from New Haven with an astro-modified Canon EOS 70D and a dual narrowband filter, through a Canon EF 24-70mm f/2.8L II USM at f/2.8, ISO 1250, with 4020 s of total exposure."
+  },
+  {
     src: "photos/m31.jpg",
     title: "M31 · Andromeda Galaxy",
     meta: "2025-10 · your telescope · total exposure",
@@ -45,7 +51,7 @@ const lbCap = document.getElementById("lb-caption");
 for (const p of PHOTOS) {
   const row = document.createElement("article");
   row.className = "photo-row reveal";
-  row.innerHTML = `<div class="photo-frame"><img src="${p.src}" alt="${p.title}" loading="lazy"><div class="shot-ph"><span>${p.title}</span><em>image not found · add ${p.src}</em></div></div><div class="photo-info"><h3>${p.title}</h3><p class="photo-meta">${p.meta}</p><p class="photo-desc">${p.desc}</p></div>`;
+  row.innerHTML = `<div class="photo-frame"><img src="${p.src}" alt="${p.title}" loading="lazy"><span class="photo-credit">© Zhibin You</span><div class="shot-ph"><span>${p.title}</span><em>image not found · add ${p.src}</em></div></div><div class="photo-info"><h3>${p.title}</h3><p class="photo-meta">${p.meta}</p><p class="photo-desc">${p.desc}</p></div>`;
   const img = row.querySelector("img");
   img.addEventListener("error", () => row.classList.add("missing"));
   img.addEventListener("click", () => {
