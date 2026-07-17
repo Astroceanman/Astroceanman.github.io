@@ -433,13 +433,13 @@ let lastClick = 0, fastStreak = 0;
 storm.addEventListener("click", () => {
   if (warping) return;
   const now = performance.now();
-  if (now - lastClick < 280) fastStreak++; else fastStreak = 0;
+  if (now - lastClick < 180) fastStreak++; else fastStreak = 0;
   lastClick = now;
   stormTotal++;
   renderStorm();
   pendingHits++;
   flushHits();
-  if (combo >= 50 && fastStreak >= 3) { warpOut(); return; }
+  if (combo >= 50 && fastStreak >= 5) { warpOut(); return; }
   combo++;
   clearTimeout(comboTimer);
   comboTimer = setTimeout(() => { combo = 0; comboEl.classList.remove("on"); }, 1200);
