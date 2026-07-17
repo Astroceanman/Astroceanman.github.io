@@ -110,7 +110,7 @@ header h1 {
   font-family: "Fraunces", serif;
   font-style: italic;
   font-size: clamp(1.05rem, 2.2vw, 1.5rem);
-  color: var(--ink-dim);
+  color: #fff;
   letter-spacing: 0.14em;
 }
 
@@ -336,8 +336,18 @@ section h2 .num {
 }
 
 .timeline h3 { font-weight: 500; font-size: 1.02rem; }
-.timeline p { color: var(--ink-dim); font-size: 0.9rem; max-width: 44rem; }
+.timeline p { color: #dfe4ef; font-size: 0.9rem; max-width: 44rem; }
 .timeline p + p { margin-top: 0.4rem; }
+
+.timeline, .pubs, .photo-info {
+  text-shadow: 0 1px 8px rgba(2, 4, 10, 0.92), 0 0 3px rgba(2, 4, 10, 0.7);
+}
+.pubs p, .photo-desc, .topic p { color: #dfe4ef; }
+
+header h1, .page-head h1, section h2,
+.timeline h3, .pubs h3, .card h3, .photo-info h3 {
+  color: #fff;
+}
 
 #cv > p { color: var(--ink-dim); }
 
