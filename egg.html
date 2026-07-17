@@ -61,8 +61,7 @@
   margin-bottom: 1.6rem;
 }
 
-.glitch {
-  position: relative;
+.hud-title {
   font-weight: 600;
   font-size: clamp(1.6rem, 5.4vw, 2.5rem);
   letter-spacing: 0.22em;
@@ -70,32 +69,21 @@
   text-shadow: 0 0 22px rgba(143, 208, 255, 0.35);
 }
 
-.glitch::before, .glitch::after {
-  content: attr(data-text);
-  position: absolute;
+.warpout {
+  position: fixed;
   inset: 0;
+  z-index: 50;
+  background: #dff1ff;
   opacity: 0;
+  pointer-events: none;
+  animation: warpflash 0.95s ease-in forwards;
 }
 
-.glitch::before { color: #62e8ff; }
-.glitch::after { color: #ff5fd2; }
-
-@keyframes glitch-a {
-  0%, 92%, 100% { opacity: 0; transform: none; clip-path: inset(0 0 0 0); }
-  93% { opacity: 0.85; transform: translate(-3px, 1px); clip-path: inset(12% 0 58% 0); }
-  95% { opacity: 0.85; transform: translate(3px, -1px); clip-path: inset(62% 0 8% 0); }
-  97% { opacity: 0; }
+@keyframes warpflash {
+  0% { opacity: 0; }
+  65% { opacity: 0.85; }
+  100% { opacity: 1; }
 }
-
-@keyframes glitch-b {
-  0%, 92%, 100% { opacity: 0; transform: none; clip-path: inset(0 0 0 0); }
-  94% { opacity: 0.85; transform: translate(3px, -1px); clip-path: inset(40% 0 34% 0); }
-  96% { opacity: 0.85; transform: translate(-3px, 1px); clip-path: inset(4% 0 78% 0); }
-  98% { opacity: 0; }
-}
-
-.glitch::before { animation: glitch-a 5.2s infinite; }
-.glitch::after { animation: glitch-b 5.2s infinite; }
 
 .term {
   margin: 1.7rem auto 0;
@@ -174,6 +162,80 @@
 }
 
 .egg-back:hover { color: var(--accent); }
+
+.storm-wrap {
+  position: fixed;
+  right: 1.6rem;
+  bottom: 1.5rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.combo {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: #62e8ff;
+  text-shadow: 0 0 12px rgba(98, 232, 255, 0.8);
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+
+.combo.on { opacity: 1; }
+
+.storm {
+  position: relative;
+  font-family: inherit;
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  padding: 0.8rem 1.4rem;
+  color: #ff5fd2;
+  background: rgba(5, 9, 20, 0.6);
+  border: 1px solid rgba(255, 95, 210, 0.5);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.storm:hover { box-shadow: 0 0 26px rgba(255, 95, 210, 0.4); }
+
+.storm:active { color: #fff; border-color: #ff5fd2; }
+
+.storm-count {
+  font-size: 0.6rem;
+  letter-spacing: 0.28em;
+  color: rgba(255, 95, 210, 0.55);
+}
+
+.storm-count #scount {
+  color: rgba(255, 160, 225, 0.95);
+  text-shadow: 0 0 10px rgba(255, 95, 210, 0.6);
+}
+
+.ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid rgba(255, 95, 210, 0.9);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: ringout 0.55s ease-out forwards;
+}
+
+@keyframes ringout {
+  to { width: 160px; height: 160px; opacity: 0; }
+}
 </style>
 </head>
 <body>
@@ -181,11 +243,17 @@
 
 <a class="egg-back" href="astrophotography.html">[ RETURN ]</a>
 
+<div class="storm-wrap">
+  <span class="combo" id="combo"></span>
+  <button class="storm" id="storm">[ WARP DRIVE ]</button>
+  <span class="storm-count"><span id="scount">&#8212;&#8212;&#8212;&#8212;&#8212;</span> JUMPS LOGGED</span>
+</div>
+
 <main class="hud">
   <div class="panel">
     <i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i>
     <p class="freq">// RESTRICTED FREQUENCY</p>
-    <h1 class="glitch" data-text="SIGNAL FOUND">SIGNAL FOUND</h1>
+    <h1 class="hud-title">SIGNAL FOUND</h1>
     <p class="term" id="term"></p>
     <div class="readout">
       <span class="digits" id="digits">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</span>
@@ -205,7 +273,7 @@ const term = document.getElementById("term");
 
 const LINES = [
   "> unlisted node detected. no inbound links.",
-  "> origin: one deliberate click on the right camera.",
+  "> decrypting carrier wave... origin: deep field, unresolved.",
   "> access granted. welcome, traveler."
 ];
 
@@ -234,7 +302,7 @@ function roll(to) {
 
 fetch(`https://abacus.jasoncameron.dev/get/${NS}/${KEY}`)
   .then(r => r.ok ? r.json() : { value: 0 })
-  .then(d => roll(d.value))
+  .then(d => roll(Number.isFinite(d.value) ? d.value : 0))
   .catch(() => { digits.textContent = "??????"; });
 
 if (localStorage.getItem("egg-liked")) {
@@ -242,7 +310,63 @@ if (localStorage.getItem("egg-liked")) {
   btn.textContent = "[ SIGNAL LOGGED ]";
 }
 
+let AC = null;
+function audioCtx() {
+  if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
+  if (AC.state === "suspended") AC.resume();
+  return AC;
+}
+
+function noiseBuf(ac) {
+  const b = ac.createBuffer(1, ac.sampleRate * 0.2, ac.sampleRate);
+  const d = b.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  return b;
+}
+
+function stormFx(combo) {
+  const ac = audioCtx(), t = ac.currentTime;
+  const f0 = 700 * Math.pow(1.05, Math.min(24, combo));
+  const o = ac.createOscillator(), g = ac.createGain();
+  o.type = "sawtooth";
+  o.frequency.setValueAtTime(f0, t);
+  o.frequency.exponentialRampToValueAtTime(110, t + 0.22);
+  g.gain.setValueAtTime(0.11, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.24);
+  o.connect(g).connect(ac.destination);
+  o.start(t); o.stop(t + 0.25);
+  const n = ac.createBufferSource(), ng = ac.createGain(), bp = ac.createBiquadFilter();
+  n.buffer = noiseBuf(ac);
+  bp.type = "bandpass";
+  bp.frequency.value = 1800 + combo * 60;
+  ng.gain.setValueAtTime(0.07, t);
+  ng.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+  n.connect(bp).connect(ng).connect(ac.destination);
+  n.start(t);
+}
+
+function transmitFx() {
+  const ac = audioCtx(), t = ac.currentTime;
+  const o = ac.createOscillator(), g = ac.createGain();
+  o.type = "sine";
+  o.frequency.setValueAtTime(420, t);
+  o.frequency.exponentialRampToValueAtTime(1260, t + 0.32);
+  g.gain.setValueAtTime(0.09, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
+  o.connect(g).connect(ac.destination);
+  o.start(t); o.stop(t + 0.4);
+  const c = ac.createOscillator(), cg = ac.createGain();
+  c.type = "sine";
+  c.frequency.value = 1580;
+  cg.gain.setValueAtTime(0.0001, t + 0.3);
+  cg.gain.exponentialRampToValueAtTime(0.08, t + 0.34);
+  cg.gain.exponentialRampToValueAtTime(0.001, t + 0.85);
+  c.connect(cg).connect(ac.destination);
+  c.start(t + 0.3); c.stop(t + 0.9);
+}
+
 btn.addEventListener("click", () => {
+  transmitFx();
   for (let i = 0; i < 5; i++) setTimeout(() => window.spawnMeteor(), i * 130);
   if (localStorage.getItem("egg-liked")) return;
   localStorage.setItem("egg-liked", "1");
@@ -250,8 +374,86 @@ btn.addEventListener("click", () => {
   btn.textContent = "[ SIGNAL LOGGED ]";
   fetch(`https://abacus.jasoncameron.dev/hit/${NS}/${KEY}`)
     .then(r => r.json())
-    .then(d => roll(d.value))
+    .then(d => { if (Number.isFinite(d.value)) roll(d.value); })
     .catch(() => {});
+});
+
+const storm = document.getElementById("storm");
+const comboEl = document.getElementById("combo");
+const scount = document.getElementById("scount");
+const SKEY = "egg-storm";
+let combo = 0, comboTimer = null, stormTotal = 0, pendingHits = 0, flushing = false;
+
+function renderStorm() {
+  if (!Number.isFinite(stormTotal)) stormTotal = 0;
+  scount.textContent = String(Math.max(0, stormTotal)).padStart(5, "0");
+}
+
+fetch(`https://abacus.jasoncameron.dev/get/${NS}/${SKEY}`)
+  .then(r => r.ok ? r.json() : { value: 0 })
+  .then(d => { if (Number.isFinite(d.value)) stormTotal = Math.max(stormTotal, d.value); renderStorm(); })
+  .catch(() => { renderStorm(); });
+
+function flushHits() {
+  if (flushing || pendingHits < 1) return;
+  flushing = true;
+  pendingHits--;
+  fetch(`https://abacus.jasoncameron.dev/hit/${NS}/${SKEY}`)
+    .then(r => r.json())
+    .then(d => { if (Number.isFinite(d.value)) stormTotal = Math.max(stormTotal, d.value); renderStorm(); })
+    .catch(() => {})
+    .finally(() => { flushing = false; if (pendingHits > 0) setTimeout(flushHits, 400); });
+}
+
+let warping = false;
+
+function warpOut() {
+  warping = true;
+  for (let i = 0; i < 40; i++) setTimeout(() => window.spawnMeteor(), Math.random() * 650);
+  try {
+    const ac = audioCtx(), t = ac.currentTime;
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = "sawtooth";
+    o.frequency.setValueAtTime(120, t);
+    o.frequency.exponentialRampToValueAtTime(1900, t + 0.8);
+    g.gain.setValueAtTime(0.001, t);
+    g.gain.exponentialRampToValueAtTime(0.14, t + 0.5);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.95);
+    o.connect(g).connect(ac.destination);
+    o.start(t); o.stop(t + 1);
+  } catch (e) {}
+  const w = document.createElement("div");
+  w.className = "warpout";
+  document.body.appendChild(w);
+  setTimeout(() => { location.href = "void.html"; }, 950);
+}
+
+let lastClick = 0, fastStreak = 0;
+
+storm.addEventListener("click", () => {
+  if (warping) return;
+  const now = performance.now();
+  if (now - lastClick < 280) fastStreak++; else fastStreak = 0;
+  lastClick = now;
+  stormTotal++;
+  renderStorm();
+  pendingHits++;
+  flushHits();
+  if (combo >= 50 && fastStreak >= 3) { warpOut(); return; }
+  combo++;
+  clearTimeout(comboTimer);
+  comboTimer = setTimeout(() => { combo = 0; comboEl.classList.remove("on"); }, 1200);
+  comboEl.textContent = "COMBO ×" + combo;
+  comboEl.classList.add("on");
+  comboEl.animate([{ transform: "scale(1.35)" }, { transform: "scale(1)" }], { duration: 180, easing: "ease-out" });
+  storm.animate([{ transform: "scale(0.92)" }, { transform: "scale(1)" }], { duration: 160, easing: "ease-out" });
+  const ring = document.createElement("span");
+  ring.className = "ring";
+  storm.appendChild(ring);
+  setTimeout(() => ring.remove(), 600);
+  stormFx(combo);
+  const n = 12 + Math.min(18, combo * 2);
+  for (let i = 0; i < n; i++) setTimeout(() => window.spawnMeteor(), Math.random() * 220);
 });
 </script>
 </body>
