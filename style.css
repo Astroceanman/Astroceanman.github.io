@@ -522,6 +522,8 @@ section.wide { max-width: 76rem; }
 
 a.card { text-decoration: none; color: inherit; display: block; }
 
+.egg { color: inherit; text-decoration: none; cursor: default; }
+
 @media (max-width: 640px) {
   .about-grid { grid-template-columns: 1fr; }
   .portrait-ph { margin: 0 auto; }

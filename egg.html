@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>signal://found</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.hud {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1.2rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.hud::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(2, 4, 10, 0.22) 2px 4px);
+  opacity: 0.5;
+}
+
+.panel {
+  position: relative;
+  max-width: 34rem;
+  width: 100%;
+  padding: clamp(2rem, 5vw, 3.2rem) clamp(1.6rem, 5vw, 3rem);
+  background: rgba(5, 9, 20, 0.62);
+  border: 1px solid rgba(143, 208, 255, 0.16);
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+
+.panel i {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 0 solid var(--accent);
+}
+
+.panel i.c1 { top: -1px; left: -1px; border-top-width: 2px; border-left-width: 2px; }
+.panel i.c2 { top: -1px; right: -1px; border-top-width: 2px; border-right-width: 2px; }
+.panel i.c3 { bottom: -1px; left: -1px; border-bottom-width: 2px; border-left-width: 2px; }
+.panel i.c4 { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; }
+
+.freq {
+  font-size: 0.68rem;
+  letter-spacing: 0.34em;
+  color: rgba(143, 208, 255, 0.65);
+  margin-bottom: 1.6rem;
+}
+
+.glitch {
+  position: relative;
+  font-weight: 600;
+  font-size: clamp(1.6rem, 5.4vw, 2.5rem);
+  letter-spacing: 0.22em;
+  color: #eef5ff;
+  text-shadow: 0 0 22px rgba(143, 208, 255, 0.35);
+}
+
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.glitch::before { color: #62e8ff; }
+.glitch::after { color: #ff5fd2; }
+
+@keyframes glitch-a {
+  0%, 92%, 100% { opacity: 0; transform: none; clip-path: inset(0 0 0 0); }
+  93% { opacity: 0.85; transform: translate(-3px, 1px); clip-path: inset(12% 0 58% 0); }
+  95% { opacity: 0.85; transform: translate(3px, -1px); clip-path: inset(62% 0 8% 0); }
+  97% { opacity: 0; }
+}
+
+@keyframes glitch-b {
+  0%, 92%, 100% { opacity: 0; transform: none; clip-path: inset(0 0 0 0); }
+  94% { opacity: 0.85; transform: translate(3px, -1px); clip-path: inset(40% 0 34% 0); }
+  96% { opacity: 0.85; transform: translate(-3px, 1px); clip-path: inset(4% 0 78% 0); }
+  98% { opacity: 0; }
+}
+
+.glitch::before { animation: glitch-a 5.2s infinite; }
+.glitch::after { animation: glitch-b 5.2s infinite; }
+
+.term {
+  margin: 1.7rem auto 0;
+  min-height: 4.2em;
+  max-width: 28rem;
+  text-align: left;
+  font-size: 0.78rem;
+  line-height: 1.9;
+  color: rgba(210, 224, 245, 0.75);
+  white-space: pre-wrap;
+}
+
+.term .cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: var(--accent);
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+.readout { margin-top: 2.2rem; }
+
+.digits {
+  display: block;
+  font-size: clamp(2.4rem, 8vw, 3.8rem);
+  font-weight: 300;
+  letter-spacing: 0.22em;
+  color: #eaf4ff;
+  text-shadow: 0 0 6px rgba(143, 208, 255, 0.9), 0 0 30px rgba(143, 208, 255, 0.45);
+}
+
+.readout .sub {
+  display: block;
+  margin-top: 0.6rem;
+  font-size: 0.64rem;
+  letter-spacing: 0.4em;
+  color: rgba(154, 165, 189, 0.8);
+}
+
+.tx {
+  margin-top: 2.4rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  letter-spacing: 0.26em;
+  padding: 0.95rem 2.2rem;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid rgba(143, 208, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.tx:hover {
+  background: var(--accent);
+  color: #04121f;
+  box-shadow: 0 0 34px rgba(143, 208, 255, 0.5);
+}
+
+.tx.sent { border-style: dashed; border-color: rgba(143, 208, 255, 0.35); color: rgba(143, 208, 255, 0.75); }
+
+.egg-back {
+  position: fixed;
+  top: 1.3rem;
+  left: 1.6rem;
+  z-index: 10;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  color: var(--ink-dim);
+  text-decoration: none;
+  transition: color 0.25s;
+}
+
+.egg-back:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<canvas id="sky"></canvas>
+
+<a class="egg-back" href="astrophotography.html">[ RETURN ]</a>
+
+<main class="hud">
+  <div class="panel">
+    <i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i>
+    <p class="freq">// RESTRICTED FREQUENCY</p>
+    <h1 class="glitch" data-text="SIGNAL FOUND">SIGNAL FOUND</h1>
+    <p class="term" id="term"></p>
+    <div class="readout">
+      <span class="digits" id="digits">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</span>
+      <span class="sub">TRANSMISSIONS LOGGED</span>
+    </div>
+    <button class="tx" id="like">[ TRANSMIT SIGNAL ]</button>
+  </div>
+</main>
+
+<script src="gaia_stars.js"></script>
+<script src="stars.js"></script>
+<script>
+const NS = "astroceanman-site", KEY = "egg-likes";
+const digits = document.getElementById("digits");
+const btn = document.getElementById("like");
+const term = document.getElementById("term");
+
+const LINES = [
+  "> unlisted node detected. no inbound links.",
+  "> origin: one deliberate click on the right camera.",
+  "> access granted. welcome, traveler."
+];
+
+let li = 0, ci = 0, out = "";
+function type() {
+  if (li >= LINES.length) { term.innerHTML = out.replace(/\n/g, "<br>"); return; }
+  out += LINES[li][ci];
+  term.innerHTML = out.replace(/\n/g, "<br>") + '<span class="cursor"></span>';
+  ci++;
+  if (ci >= LINES[li].length) { li++; ci = 0; out += "\n"; setTimeout(type, 420); }
+  else setTimeout(type, 18 + Math.random() * 30);
+}
+type();
+
+function pad(n) { return String(Math.max(0, n)).padStart(6, "0"); }
+
+function roll(to) {
+  const t0 = performance.now(), dur = 900;
+  function step(t) {
+    const k = Math.min(1, (t - t0) / dur);
+    digits.textContent = pad(Math.round(to * (1 - Math.pow(1 - k, 3))));
+    if (k < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+fetch(`https://abacus.jasoncameron.dev/get/${NS}/${KEY}`)
+  .then(r => r.ok ? r.json() : { value: 0 })
+  .then(d => roll(d.value))
+  .catch(() => { digits.textContent = "??????"; });
+
+if (localStorage.getItem("egg-liked")) {
+  btn.classList.add("sent");
+  btn.textContent = "[ SIGNAL LOGGED ]";
+}
+
+btn.addEventListener("click", () => {
+  for (let i = 0; i < 5; i++) setTimeout(() => window.spawnMeteor(), i * 130);
+  if (localStorage.getItem("egg-liked")) return;
+  localStorage.setItem("egg-liked", "1");
+  btn.classList.add("sent");
+  btn.textContent = "[ SIGNAL LOGGED ]";
+  fetch(`https://abacus.jasoncameron.dev/hit/${NS}/${KEY}`)
+    .then(r => r.json())
+    .then(d => roll(d.value))
+    .catch(() => {});
+});
+</script>
+</body>
+</html>

@@ -40,6 +40,7 @@ const PHOTOS = [
     src: "photos/m45-pleiades.jpg",
     title: "M45 · The Pleiades",
     meta: "October 2023 · Baltimore, MD · Canon EOS 6D",
+    captionHtml: "M45 · The Pleiades · October 2023 · Baltimore, MD · <a class=\"egg\" href=\"egg.html\">Canon EOS 6D</a>",
     desc: "A close-up of the northern Pleiades. The three brilliant blue stars are <strong>Maia</strong> (wrapped in its reflection nebula, NGC 1432), together with <strong>Taygeta</strong> and <strong>Celaeno</strong>. All three are hot B-type stars lighting up the dust cloud the cluster is currently drifting through. Shot from the Maryland Space Grant Observatory with the <a href=\"https://md.spacegrant.org/observatory-open-house/morris-w-offit-telescope/\" target=\"_blank\" rel=\"noopener\">Morris W. Offit Telescope</a> and a Canon EOS 6D, together with <a href=\"https://www.gavin-wang.com\" target=\"_blank\" rel=\"noopener\">Gavin Wang</a>."
   }
 ];
@@ -57,7 +58,7 @@ for (const p of PHOTOS) {
   img.addEventListener("error", () => row.classList.add("missing"));
   img.addEventListener("click", () => {
     lbImg.src = p.src;
-    lbCap.textContent = `${p.title} · ${p.meta}`;
+    lbCap.innerHTML = p.captionHtml || `${p.title} · ${p.meta}`;
     lightbox.classList.add("open");
   });
   gallery.appendChild(row);

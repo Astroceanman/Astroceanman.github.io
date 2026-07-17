@@ -99,6 +99,8 @@ function spawnMeteor() {
   meteors.push({ x, y, vx: Math.cos(a) * 9, vy: Math.sin(a) * 9, life: 1 });
 }
 
+window.spawnMeteor = spawnMeteor;
+
 let scrollY = 0;
 addEventListener("scroll", () => { scrollY = window.scrollY; }, { passive: true });
 addEventListener("resize", build);
