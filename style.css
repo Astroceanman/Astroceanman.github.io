@@ -523,6 +523,7 @@ a.card { text-decoration: none; color: inherit; display: block; }
 
 @media (max-width: 640px) {
   .about-grid { grid-template-columns: 1fr; }
+  .portrait { order: -1; }
   .portrait img { margin: 0 auto; }
   .pubs li, .timeline li { grid-template-columns: 1fr; gap: 0.3rem; }
 }
