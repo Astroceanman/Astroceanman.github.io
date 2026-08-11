@@ -255,18 +255,15 @@ section h2 .num {
 
 .about-grid p + p { margin-top: 1rem; color: var(--ink-dim); }
 
-.portrait-ph {
+.portrait img {
+  display: block;
   width: 180px;
   height: 180px;
   border-radius: 50%;
-  border: 1px dashed rgba(143, 208, 255, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: var(--ink-dim);
-  font-size: 0.85rem;
-  background: var(--card);
+  object-fit: cover;
+  object-position: center;
+  border: 1px solid rgba(143, 208, 255, 0.34);
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.45), 0 0 24px rgba(143, 208, 255, 0.09);
 }
 
 .cards {
@@ -526,6 +523,6 @@ a.card { text-decoration: none; color: inherit; display: block; }
 
 @media (max-width: 640px) {
   .about-grid { grid-template-columns: 1fr; }
-  .portrait-ph { margin: 0 auto; }
+  .portrait img { margin: 0 auto; }
   .pubs li, .timeline li { grid-template-columns: 1fr; gap: 0.3rem; }
 }
