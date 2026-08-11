@@ -248,7 +248,7 @@ section h2 .num {
 
 .about-grid {
   display: grid;
-  grid-template-columns: 180px 1fr;
+  grid-template-columns: 1fr 180px;
   gap: 2.5rem;
   align-items: start;
 }
